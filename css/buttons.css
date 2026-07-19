@@ -1,0 +1,65 @@
+/* buttons.css — botones compartidos por todas las secciones */
+
+button{
+  font-family:var(--font-base);
+  cursor:pointer;
+}
+
+.btn-primario{
+  background:var(--azul);
+  color:var(--superficie);
+  border:none;
+  border-radius:var(--radio-md);
+  padding:13px var(--espacio-md);
+  font-size:15px;
+  font-weight:600;
+}
+
+.btn-secundario{
+  background:var(--superficie);
+  color:var(--azul);
+  border:var(--grosor-borde) solid var(--azul);
+  border-radius:var(--radio-md);
+  padding:12px var(--espacio-md);
+  font-size:14px;
+  font-weight:600;
+}
+
+.btn-terciario{
+  background:transparent;
+  color:var(--gris);
+  border:none;
+  padding:var(--espacio-sm) var(--espacio-xs);
+  font-size:13px;
+  text-align:center;
+}
+
+.btn-aceptar{
+  background:var(--verde);
+  color:var(--superficie);
+  border:none;
+  border-radius:var(--radio-sm);
+  padding:10px 14px;
+  font-size:14px;
+  font-weight:600;
+  flex:1;
+}
+
+.btn-rechazar{
+  background:var(--superficie);
+  color:var(--error-texto);
+  border:var(--grosor-borde) solid var(--peligro-borde);
+  border-radius:var(--radio-sm);
+  padding:10px 14px;
+  font-size:14px;
+  font-weight:600;
+}
+
+.link-deshacer{
+  background:none;
+  border:none;
+  color:var(--azul);
+  text-decoration:underline;
+  font-size:13px;
+  padding:0;
+}

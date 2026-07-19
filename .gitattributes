@@ -1,0 +1,5 @@
+# Normaliza los saltos de linea: LF en el repositorio, CRLF en el disco de Windows.
+* text=auto eol=lf
+
+# Los .ps1 se quedan con CRLF: PowerShell lo prefiere.
+*.ps1 text eol=crlf

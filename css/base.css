@@ -1,0 +1,74 @@
+/* ═══════════════════════════════════════════════════════════════
+   base.css — reset, variables de diseño y tipografía global
+   Los valores son exactamente los del artefacto original.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root{
+  /* ── Color · marca ──────────────────────────────────────────── */
+  --ink:#141C2E;
+  --azul:#2B4ACB;
+  --verde:#1E7A4F;
+  --ambar:#8A6116;
+  --gris:#5A6478;
+  --fondo:#EDF0F6;
+
+  /* ── Color · superficies y bordes ───────────────────────────── */
+  --superficie:#fff;
+  --borde:#C9D0DE;
+  --azul-suave:#EEF2FF;
+  --verde-suave:#E3F3EA;
+  --ambar-suave:#FBF1DC;
+
+  /* ── Color · estados ────────────────────────────────────────── */
+  --aviso-fondo:#FFF8EA;
+  --aviso-borde:#E8CE96;
+  --error-fondo:#FBEAEA;
+  --error-borde:#E3B1B1;
+  --error-texto:#7A2222;
+  --peligro-borde:#D8A5A5;
+
+  /* ── Tipografía ─────────────────────────────────────────────── */
+  --font-titulo:'Archivo',sans-serif;
+  --font-base:'Inter',sans-serif;
+  --tracking-eyebrow:.14em;
+  --tracking-titulo:-0.02em;
+
+  /* ── Espaciado ──────────────────────────────────────────────── */
+  --espacio-xs:4px;
+  --espacio-sm:8px;
+  --espacio-md:16px;
+  --espacio-lg:20px;
+  --espacio-xl:32px;
+
+  /* ── Radios ─────────────────────────────────────────────────── */
+  --radio-sm:10px;
+  --radio-md:12px;
+  --radio-lg:14px;
+  --radio-xl:18px;
+  --radio-full:999px;
+
+  /* ── Bordes y sombras ───────────────────────────────────────── */
+  --grosor-borde:1.5px;
+  --sombra-sutil:0 1px 2px rgba(20,28,46,.05);
+  --sombra-tarjeta:0 1px 2px rgba(20,28,46,.06), 0 8px 24px rgba(20,28,46,.07);
+
+  /* ── Medidas ────────────────────────────────────────────────── */
+  --ancho-max:460px;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  background:var(--fondo);
+  color:var(--ink);
+  font-family:var(--font-base);
+}
+
+h1{
+  font-family:var(--font-titulo);
+  font-size:30px;
+  font-weight:800;
+  letter-spacing:var(--tracking-titulo);
+  margin:2px 0 0;
+}

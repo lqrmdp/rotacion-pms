@@ -1,0 +1,53 @@
+/* riel.css — lista de próximos turnos */
+
+.riel{
+  background:var(--superficie);
+  border-radius:var(--radio-lg);
+  padding:6px 0;
+  margin-top:12px;
+  box-shadow:var(--sombra-sutil);
+}
+
+.riel-fila{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px var(--espacio-md);
+  border-left:3px solid transparent;
+}
+.riel-fila.activo{
+  background:var(--azul-suave);
+  border-left-color:var(--azul);
+}
+
+.riel-punto{
+  width:var(--espacio-sm);
+  height:var(--espacio-sm);
+  border-radius:var(--radio-full);
+  background:var(--borde);
+  flex-shrink:0;
+}
+.riel-fila.activo .riel-punto{background:var(--azul);}
+
+.riel-fecha{
+  font-size:12.5px;
+  color:var(--gris);
+  width:52px;
+  flex-shrink:0;
+}
+
+.riel-nombre{
+  font-size:14.5px;
+  font-weight:500;
+}
+.riel-fila.activo .riel-nombre{
+  font-weight:700;
+  color:var(--azul);
+}
+
+.riel-swap{
+  font-size:11.5px;
+  color:var(--ambar);
+  margin-left:auto;
+  font-weight:600;
+}

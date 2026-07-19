@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rotación de viernes · Equipo PM</title>
+
+<!-- Dependencias externas (CDN) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Hojas de estilo: base primero, luego el resto en el orden del DOM -->
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/buttons.css">
+<link rel="stylesheet" href="css/header.css">
+<link rel="stylesheet" href="css/alertas.css">
+<link rel="stylesheet" href="css/tarjeta-turno.css">
+<link rel="stylesheet" href="css/riel.css">
+<link rel="stylesheet" href="css/historial.css">
+<link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+
+<main class="wrap">
+
+  <header class="cabecera">
+    <p class="eyebrow">Estatus ante dirección · Equipo PM</p>
+    <h1>Rotación de viernes</h1>
+  </header>
+
+  <div class="id-row">
+    <label for="selYo">¿Quién eres?</label>
+    <select id="selYo">
+      <option value="">Selecciona tu nombre…</option>
+    </select>
+  </div>
+
+  <div class="error" id="cajaError" role="alert"></div>
+
+  <section class="propuesta" id="cajaPropuesta">
+    <p class="propuesta-titulo">⚠️ Propuesta de cambio sin responder</p>
+    <p class="propuesta-texto" id="propuestaTexto"></p>
+    <p class="propuesta-meta" id="propuestaMeta"></p>
+    <div class="propuesta-btns" id="propuestaBtns"></div>
+  </section>
+
+  <section class="tarjeta">
+    <div class="tarjeta-top">
+      <div>
+        <p class="eyebrow-claro">Este viernes</p>
+        <p class="fecha-grande" id="fechaGrande"></p>
+      </div>
+      <span class="chip" id="chipEstado"></span>
+    </div>
+    <p class="pm-nombre" id="pmNombre"></p>
+    <p class="pm-sub">presenta el estatus de proyectos</p>
+    <div class="acciones" id="acciones"></div>
+    <p class="nota-check" id="notaCheck"></p>
+  </section>
+
+  <section class="seccion">
+    <p class="seccion-titulo">Próximos turnos</p>
+    <p class="seccion-nota">Fechas tentativas: si un viernes se recorre, todo se desplaza.</p>
+    <div class="riel" id="riel"></div>
+  </section>
+
+  <section class="seccion">
+    <button class="toggle-hist" id="toggleHist">Historial ▾</button>
+    <div class="hist-lista oculto" id="histLista"></div>
+  </section>
+
+  <footer class="footer-row">
+    <button class="btn-refrescar" id="btnRefrescar">⟳ Actualizar</button>
+    <span class="sync-meta" id="syncMeta"></span>
+  </footer>
+
+</main>
+
+<!-- Punto de entrada. type="module" ya implica carga diferida (defer). -->
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

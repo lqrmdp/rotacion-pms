@@ -1,0 +1,70 @@
+/* tarjeta-turno.css — tarjeta del viernes en curso */
+
+.tarjeta{
+  background:var(--superficie);
+  border-radius:var(--radio-xl);
+  padding:var(--espacio-lg) var(--espacio-lg) 22px;
+  margin-top:var(--espacio-lg);
+  box-shadow:var(--sombra-tarjeta);
+  border-top:4px solid var(--azul);
+}
+
+.tarjeta-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+}
+
+.eyebrow-claro{
+  font-family:var(--font-titulo);
+  font-size:10.5px;
+  font-weight:700;
+  letter-spacing:var(--tracking-eyebrow);
+  color:var(--gris);
+  text-transform:uppercase;
+}
+
+.fecha-grande{
+  font-size:14px;
+  font-weight:600;
+  margin-top:2px;
+  text-transform:capitalize;
+}
+
+.chip{
+  font-size:12px;
+  font-weight:600;
+  border-radius:var(--radio-full);
+  padding:5px 11px;
+  white-space:nowrap;
+}
+.chip-verde{background:var(--verde-suave); color:var(--verde);}
+.chip-ambar{background:var(--ambar-suave); color:var(--ambar);}
+
+.pm-nombre{
+  font-family:var(--font-titulo);
+  font-size:34px;
+  font-weight:800;
+  letter-spacing:var(--tracking-titulo);
+  margin-top:var(--espacio-md);
+  line-height:1.05;
+}
+
+.pm-sub{
+  font-size:13px;
+  color:var(--gris);
+  margin-top:var(--espacio-xs);
+}
+
+.acciones{
+  margin-top:var(--espacio-lg);
+  display:flex;
+  flex-direction:column;
+  gap:var(--espacio-sm);
+}
+
+.nota-check{
+  font-size:13px;
+  color:var(--gris);
+  margin-top:14px;
+}

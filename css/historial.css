@@ -1,0 +1,39 @@
+/* historial.css — bloque plegable de registros pasados */
+
+.toggle-hist{
+  font-family:var(--font-titulo);
+  font-size:16px;
+  font-weight:700;
+  background:none;
+  border:none;
+  color:var(--ink);
+  padding:0;
+  width:100%;
+  text-align:left;
+}
+
+.hist-lista{
+  margin-top:var(--espacio-sm);
+  display:flex;
+  flex-direction:column;
+  gap:var(--espacio-sm);
+}
+
+.hist-fila{
+  background:var(--superficie);
+  border-radius:var(--radio-sm);
+  padding:10px 14px;
+  font-size:13.5px;
+  line-height:1.45;
+}
+
+.hist-meta{
+  color:var(--gris);
+  font-size:12.5px;
+}
+
+.vacio{
+  font-size:13px;
+  color:var(--gris);
+  padding:6px 2px;
+}
