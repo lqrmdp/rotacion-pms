@@ -45,6 +45,15 @@
   color:var(--azul);
 }
 
+.riel-fila--salto .riel-nombre{
+  color:var(--gris);
+  font-style:italic;
+  font-weight:400;
+}
+.riel-fila--salto .riel-fecha{
+  text-decoration:line-through;
+}
+
 .riel-swap{
   font-size:11.5px;
   color:var(--ambar);

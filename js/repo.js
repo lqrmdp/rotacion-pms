@@ -10,6 +10,12 @@ import { setState } from "./store.js";
 import { mostrarError, ocultarError } from "./errores.js";
 import { el } from "./dom.js";
 
+/** Sello de última sincronización, abajo a la derecha. */
+export function marcarSincronizado(){
+  el.syncMeta.textContent =
+    "Sincronizado " + new Date().toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit"});
+}
+
 /** Crea el documento la primera vez que alguien abre la app. */
 export async function asegurarDocumento(){
   const snap = await getDoc(docRef);
@@ -25,8 +31,7 @@ export function escucharCambios(){
       // Firestore no soporta objetos con llaves numéricas anidadas de forma nativa en todos los SDKs;
       // se guardan como mapas normales, así que basta con leer directo.
       setState(snap.data());
-      el.syncMeta.textContent =
-        "Sincronizado " + new Date().toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit"});
+      marcarSincronizado();
     }
   }, (err) => {
     mostrarError("No se pudo conectar con la base de datos. Revisa la configuración de Firebase.");

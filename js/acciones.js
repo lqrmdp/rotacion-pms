@@ -15,10 +15,14 @@ export function marcarRealizada(viernes){
   });
 }
 
+/** Revierte el último registro, sea una presentación o un feriado.
+    Solo el feriado devuelve el turno: un feriado nunca lo consumió. */
 export function deshacerUltima(){
   mutar(s => {
-    const i = s.history.map(h=>h.type).lastIndexOf("check");
-    if (i>=0){ s.history.splice(i,1); s.turn = Math.max(0, s.turn-1); }
+    const ultima = s.history[s.history.length - 1];
+    if (!ultima) return s;
+    s.history.pop();
+    if (ultima.type === "check") s.turn = Math.max(0, s.turn - 1);
     return s;
   });
 }

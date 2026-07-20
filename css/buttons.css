@@ -5,6 +5,12 @@ button{
   cursor:pointer;
 }
 
+/* Sin nombre seleccionado no se puede registrar nada. */
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
 .btn-primario{
   background:var(--azul);
   color:var(--superficie);

@@ -3,7 +3,7 @@
 
 import { getState, getYo } from "./store.js";
 import { proximoViernes, isoDate } from "./fechas.js";
-import { asignadoIdx } from "./rotacion.js";
+import { asignadoIdx, viernesEfectivo } from "./rotacion.js";
 import { pintarPropuesta } from "./vista-propuesta.js";
 import { pintarTurno } from "./vista-turno.js";
 import { pintarRiel } from "./vista-riel.js";
@@ -14,18 +14,22 @@ export function render(){
   if (!state) return;
   const yo = getYo();
 
-  const viernes = proximoViernes();
+  // El viernes que toca de verdad: el primero que no esté marcado como feriado.
+  const viernes = viernesEfectivo(state);
   const idxActual = asignadoIdx(state, state.turn);
   const pmActual = state.pms[idxActual];
   const idxSiguiente = (idxActual+1) % state.pms.length;
   const pmSiguiente = state.pms[idxSiguiente];
   const propuestaActiva = state.proposals.find(p => p.turn===state.turn && p.status==="pendiente");
   const checkDeHoy = state.history.find(h => h.type==="check" && h.date===isoDate(viernes));
-  const skipDeHoy = state.history.find(h => h.type==="skip" && h.date===isoDate(viernes));
-  const historyChecks = state.history.filter(h=>h.type==="check");
-  const ultimaCheck = historyChecks[historyChecks.length-1];
 
-  pintarTurno({ yo, viernes, pmActual, pmSiguiente, propuestaActiva, checkDeHoy, skipDeHoy, ultimaCheck });
+  // Feriados que aún están por delante: son los que se pueden deshacer.
+  const desde = isoDate(proximoViernes());
+  const saltosVigentes = state.history.filter(h => h.type==="skip" && h.date >= desde);
+  const ultimoSalto = saltosVigentes[saltosVigentes.length-1];
+  const ultimaEntrada = state.history[state.history.length-1];
+
+  pintarTurno({ yo, viernes, pmActual, pmSiguiente, propuestaActiva, checkDeHoy, ultimoSalto, ultimaEntrada });
   pintarPropuesta({ state, yo, propuestaActiva, viernes });
   pintarRiel(state);
   pintarHistorial(state);

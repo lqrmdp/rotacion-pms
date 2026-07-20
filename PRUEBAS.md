@@ -34,9 +34,11 @@ Prioridades: **P1** = si falla, no se libera · **P2** = deseable, no bloqueante
 | B1 | Marcar realizada | Elige tu nombre → «Marcar presentación como realizada» | Chip pasa a ✅ Realizada. El riel avanza: el 24-jul pasa a Facundo | P1 |
 | B2 | Trazabilidad | Mira bajo la tarjeta | «Marcada por *tu nombre* · fecha y hora» | P1 |
 | B3 | Deshacer | Pulsa «deshacer» | Vuelve a Jorge García y a ⏳ Pendiente | P1 |
-| B4 | Feriado | «✖️ Registrar viernes sin sesión» | Desaparecen los botones. Dice que el turno de Jorge se traslada al siguiente viernes | P1 |
-| B5 | El feriado no consume turno | Tras B4, mira el riel | Jorge sigue siendo el próximo: un feriado no le hace perder su turno | P1 |
-| B6 | Historial | Abre «Historial ▾» | Aparecen las acciones anteriores, la más reciente arriba, con quién y cuándo | P2 |
+| B4 | Feriado | «✖️ Registrar viernes sin sesión» | La tarjeta salta al viernes siguiente. En el riel, el feriado aparece tachado como «Sin sesión · feriado» | P1 |
+| B5 | El feriado no consume turno | Tras B4, mira el riel | El mismo PM ocupa ahora el viernes siguiente: un feriado no le hace perder su turno | P1 |
+| B6 | Deshacer feriado | Pulsa «deshacer» en la nota | Vuelve todo atrás: el feriado desaparece del riel y la tarjeta regresa a ese viernes | P1 |
+| B7 | Registrar exige identidad | Recarga sin elegir nombre | Los dos botones salen atenuados y no se pueden pulsar, con el aviso «Selecciona tu nombre…» | P1 |
+| B8 | Historial | Abre «Historial ▾» | Aparecen las acciones anteriores, la más reciente arriba, con quién y cuándo | P2 |
 
 ## C · Cesión de turno
 
@@ -54,7 +56,7 @@ Prioridades: **P1** = si falla, no se libera · **P2** = deseable, no bloqueante
 |---|---|---|---|---|
 | D1 | Tiempo real | Con A y B abiertos, actúa en A | B se actualiza solo en menos de 2 s, sin recargar | P1 |
 | D2 | Escrituras simultáneas | Pulsa «Marcar realizada» en A y B casi a la vez | El turno avanza **una sola vez**, no dos | P1 |
-| D3 | Botón Actualizar | Pulsa «⟳ Actualizar» | Los datos se refrescan sin errores | P2 |
+| D3 | Botón Actualizar | Pulsa «⟳ Actualizar» | Cambia a «Actualizando…» un instante y el sello «Sincronizado hh:mm» se pone a la hora actual | P2 |
 
 ## E · Avisos
 

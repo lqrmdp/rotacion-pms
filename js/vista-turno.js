@@ -2,10 +2,20 @@
    nombre del PM, botones de acción y nota de confirmación. */
 
 import { el } from "./dom.js";
-import { fmtLarga, fmtHora } from "./fechas.js";
+import { fmtLarga, fmtCorta, fmtHora } from "./fechas.js";
 import { marcarRealizada, deshacerUltima, registrarSinSesion, proponerCesion } from "./acciones.js";
 
-export function pintarTurno({ yo, viernes, pmActual, pmSiguiente, propuestaActiva, checkDeHoy, skipDeHoy, ultimaCheck }){
+/** Enlace «deshacer», solo para el último registro del historial. */
+function enlaceDeshacer(){
+  const btn = document.createElement("button");
+  btn.className = "link-deshacer";
+  btn.textContent = "deshacer";
+  btn.style.marginLeft = "6px";
+  btn.onclick = deshacerUltima;
+  return btn;
+}
+
+export function pintarTurno({ yo, viernes, pmActual, pmSiguiente, propuestaActiva, checkDeHoy, ultimoSalto, ultimaEntrada }){
   el.fechaGrande.textContent = fmtLarga(viernes);
   el.pmNombre.textContent = pmActual;
 
@@ -18,33 +28,40 @@ export function pintarTurno({ yo, viernes, pmActual, pmSiguiente, propuestaActiv
   const notaCheck = el.notaCheck;
   notaCheck.textContent = "";
 
-  if (!checkDeHoy && !skipDeHoy){
+  // Sin nombre seleccionado no se registra nada: todo queda anónimo si no.
+  const identificado = !!yo;
+
+  if (!checkDeHoy){
     const bMarcar = document.createElement("button");
-    bMarcar.className="btn-primario"; bMarcar.textContent="Marcar presentación como realizada";
+    bMarcar.className = "btn-primario";
+    bMarcar.textContent = "Marcar presentación como realizada";
+    bMarcar.disabled = !identificado;
     bMarcar.onclick = () => marcarRealizada(viernes);
     acciones.appendChild(bMarcar);
 
-    if (yo === pmActual && !propuestaActiva){
+    if (identificado && yo === pmActual && !propuestaActiva){
       const bCeder = document.createElement("button");
-      bCeder.className="btn-secundario"; bCeder.textContent=`Ceder mi turno a ${pmSiguiente}`;
+      bCeder.className = "btn-secundario";
+      bCeder.textContent = `Ceder mi turno a ${pmSiguiente}`;
       bCeder.onclick = proponerCesion;
       acciones.appendChild(bCeder);
     }
+
     const bSkip = document.createElement("button");
-    bSkip.className="btn-terciario"; bSkip.textContent="✖️ Registrar viernes sin sesión (feriado)";
+    bSkip.className = "btn-terciario";
+    bSkip.textContent = "✖️ Registrar viernes sin sesión (feriado)";
+    bSkip.disabled = !identificado;
     bSkip.onclick = () => registrarSinSesion(viernes);
     acciones.appendChild(bSkip);
   }
 
-  if (checkDeHoy){
+  if (!identificado){
+    notaCheck.textContent = "Selecciona tu nombre arriba para poder registrar.";
+  } else if (checkDeHoy){
     notaCheck.innerHTML = `Marcada por ${checkDeHoy.by||"—"} · ${fmtHora(checkDeHoy.at)}`;
-    if (ultimaCheck === checkDeHoy){
-      const btn = document.createElement("button");
-      btn.className="link-deshacer"; btn.textContent="deshacer"; btn.style.marginLeft="6px";
-      btn.onclick = deshacerUltima;
-      notaCheck.appendChild(btn);
-    }
-  } else if (skipDeHoy){
-    notaCheck.textContent = `✖️ Registrado sin sesión por ${skipDeHoy.by||"—"}. El turno de ${pmActual} se traslada al siguiente viernes.`;
+    if (ultimaEntrada === checkDeHoy) notaCheck.appendChild(enlaceDeshacer());
+  } else if (ultimoSalto){
+    notaCheck.innerHTML = `✖️ El ${fmtCorta(new Date(ultimoSalto.date + "T12:00:00"))} se registró sin sesión por ${ultimoSalto.by||"—"}. El turno se corrió a este viernes.`;
+    if (ultimaEntrada === ultimoSalto) notaCheck.appendChild(enlaceDeshacer());
   }
 }

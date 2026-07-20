@@ -5,7 +5,7 @@ import { PMS } from "./config.js";
 import { el } from "./dom.js";
 import { setYo, setState, subscribe } from "./store.js";
 import { render } from "./render.js";
-import { asegurarDocumento, escucharCambios, leerUnaVez } from "./repo.js";
+import { asegurarDocumento, escucharCambios, leerUnaVez, marcarSincronizado } from "./repo.js";
 import { mostrarError } from "./errores.js";
 
 // La vista se repinta ante cualquier cambio de estado.
@@ -21,9 +21,20 @@ el.toggleHist.addEventListener("click", () => {
   el.toggleHist.textContent = "Historial " + (abierto ? "▾" : "▴");
 });
 
+// Los datos ya llegan solos por onSnapshot, así que este botón rara vez
+// cambia nada. Damos señal visible para que no parezca que está muerto.
 el.btnRefrescar.addEventListener("click", async () => {
-  const datos = await leerUnaVez();
-  if (datos) setState(datos);
+  const original = el.btnRefrescar.textContent;
+  el.btnRefrescar.disabled = true;
+  el.btnRefrescar.textContent = "⟳ Actualizando…";
+  try {
+    const datos = await leerUnaVez();
+    if (datos) setState(datos);
+    marcarSincronizado();
+  } finally {
+    el.btnRefrescar.disabled = false;
+    el.btnRefrescar.textContent = original;
+  }
 });
 
 // ─── Arranque ────────────────────────────────────────────────────────
