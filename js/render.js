@@ -14,22 +14,22 @@ export function render(){
   if (!state) return;
   const yo = getYo();
 
-  // El viernes que toca de verdad: el primero que no esté marcado como feriado.
+  // El próximo viernes sin resolver: ni presentado ni marcado como feriado.
   const viernes = viernesEfectivo(state);
   const idxActual = asignadoIdx(state, state.turn);
   const pmActual = state.pms[idxActual];
   const idxSiguiente = (idxActual+1) % state.pms.length;
   const pmSiguiente = state.pms[idxSiguiente];
   const propuestaActiva = state.proposals.find(p => p.turn===state.turn && p.status==="pendiente");
-  const checkDeHoy = state.history.find(h => h.type==="check" && h.date===isoDate(viernes));
 
-  // Feriados que aún están por delante: son los que se pueden deshacer.
+  // Último viernes resuelto que todavía se ve en el riel: es el que se
+  // puede deshacer, y el que explica por qué la fecha se ha corrido.
   const desde = isoDate(proximoViernes());
-  const saltosVigentes = state.history.filter(h => h.type==="skip" && h.date >= desde);
-  const ultimoSalto = saltosVigentes[saltosVigentes.length-1];
+  const vigentes = state.history.filter(h => h.date >= desde);
+  const ultimoResuelto = vigentes[vigentes.length-1];
   const ultimaEntrada = state.history[state.history.length-1];
 
-  pintarTurno({ yo, viernes, pmActual, pmSiguiente, propuestaActiva, checkDeHoy, ultimoSalto, ultimaEntrada });
+  pintarTurno({ state, yo, viernes, pmActual, pmSiguiente, propuestaActiva, ultimoResuelto, ultimaEntrada });
   pintarPropuesta({ state, yo, propuestaActiva, viernes });
   pintarRiel(state);
   pintarHistorial(state);

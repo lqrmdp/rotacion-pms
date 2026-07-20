@@ -37,8 +37,8 @@ function avisoSemanal() {
   const estado  = leerEstado();
   const viernes = proximoViernes();
 
-  if (yaPresentado(estado, viernes)) {
-    console.log('El viernes ' + iso(viernes) + ' ya está marcado. No se avisa.');
+  if (yaResuelto(estado, viernes)) {
+    console.log('El viernes ' + iso(viernes) + ' ya está resuelto (presentado o feriado). No se avisa.');
     return;
   }
 
@@ -78,12 +78,11 @@ function asignadoIdx(s, turn) {
   return ov !== undefined ? Number(ov.integerValue) : turn % s.pms.length;
 }
 
-/** Evita el recordatorio si ese viernes ya se marcó como realizado. */
-function yaPresentado(s, viernes) {
+/** Sin recordatorio si ese viernes ya está presentado o es feriado. */
+function yaResuelto(s, viernes) {
   const dia = iso(viernes);
   return s.history.some(function (h) {
-    const hf = h.mapValue.fields;
-    return hf.type.stringValue === 'check' && hf.date.stringValue === dia;
+    return h.mapValue.fields.date.stringValue === dia;
   });
 }
 

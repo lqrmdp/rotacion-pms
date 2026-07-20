@@ -1,7 +1,9 @@
 /* rotacion.js — lógica pura de la rotación: quién presenta y cuándo.
 
-   Los viernes registrados como feriado no consumen turno: se saltan y
-   todo lo que viene detrás se desplaza una semana. */
+   Un viernes con registro en el historial ya está resuelto y no vuelve a
+   ofrecerse, tanto si se presentó como si fue feriado. La diferencia está
+   en el turno: presentar lo consume, un feriado no. Por eso el feriado
+   desplaza a todo el mundo una semana sin que nadie pierda su vez. */
 
 import { proximoViernes, isoDate } from "./fechas.js";
 
@@ -11,37 +13,47 @@ export function asignadoIdx(s, turn){
   return ov !== undefined ? ov : turn % s.pms.length;
 }
 
-/** Fechas marcadas como «sin sesión». */
-export function viernesSaltados(s){
-  return new Set((s.history || []).filter(h => h.type === "skip").map(h => h.date));
+/** Historial indexado por fecha: qué viernes están ya resueltos. */
+export function registrosPorFecha(s){
+  const m = new Map();
+  (s.history || []).forEach(h => m.set(h.date, h));
+  return m;
 }
 
-/** El primer viernes que sí tiene sesión: el que toca de verdad. */
+/** El primer viernes sin resolver: el que de verdad toca. */
 export function viernesEfectivo(s){
-  const saltados = viernesSaltados(s);
+  const resueltos = registrosPorFecha(s);
   const d = proximoViernes();
   let guardia = 0;
-  while (saltados.has(isoDate(d)) && guardia++ < 260){
+  while (resueltos.has(isoDate(d)) && guardia++ < 260){
     d.setDate(d.getDate() + 7);
   }
   return d;
 }
 
-/** Los próximos `n` viernes. Los feriados aparecen como filas sin turno. */
+/** Los próximos `n` viernes, mezclando los ya resueltos con los pendientes. */
 export function proximosTurnos(s, n = 8){
-  const saltados = viernesSaltados(s);
+  const resueltos = registrosPorFecha(s);
   const out = [];
   let fecha = proximoViernes();
   let t = s.turn;
   let guardia = 0;
 
   while (out.length < n && guardia++ < 260){
-    if (saltados.has(isoDate(fecha))){
-      out.push({ tipo: "salto", fecha: new Date(fecha) });
+    const h = resueltos.get(isoDate(fecha));
+
+    if (h){
+      // Ya resuelto: el turno que consumió (si lo hizo) quedó guardado.
+      out.push({
+        tipo: h.type === "skip" ? "salto" : "hecho",
+        fecha: new Date(fecha),
+        idx: h.pmIndex
+      });
     } else {
       out.push({ tipo: "turno", turn: t, idx: asignadoIdx(s, t), fecha: new Date(fecha) });
       t++;
     }
+
     fecha = new Date(fecha);
     fecha.setDate(fecha.getDate() + 7);
   }

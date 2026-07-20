@@ -31,9 +31,9 @@ Prioridades: **P1** = si falla, no se libera · **P2** = deseable, no bloqueante
 
 | # | Qué valida | Cómo | Resultado esperado | Pri |
 |---|---|---|---|---|
-| B1 | Marcar realizada | Elige tu nombre → «Marcar presentación como realizada» | Chip pasa a ✅ Realizada. El riel avanza: el 24-jul pasa a Facundo | P1 |
-| B2 | Trazabilidad | Mira bajo la tarjeta | «Marcada por *tu nombre* · fecha y hora» | P1 |
-| B3 | Deshacer | Pulsa «deshacer» | Vuelve a Jorge García y a ⏳ Pendiente | P1 |
+| B1 | Marcar realizada | Elige tu nombre → «Marcar presentación como realizada» | La tarjeta salta al viernes siguiente con el PM siguiente. El viernes marcado queda en el riel, tachado y con «✅ presentada» | P1 |
+| B2 | Trazabilidad | Mira bajo la tarjeta | «✅ El *dd-mmm* presentó *PM* · marcado por *tu nombre*, fecha y hora» | P1 |
+| B3 | Deshacer | Pulsa «deshacer» | La tarjeta vuelve al viernes anterior con su PM, y ese viernes desaparece del riel como resuelto | P1 |
 | B4 | Feriado | «✖️ Registrar viernes sin sesión» | La tarjeta salta al viernes siguiente. En el riel, el feriado aparece tachado como «Sin sesión · feriado» | P1 |
 | B5 | El feriado no consume turno | Tras B4, mira el riel | El mismo PM ocupa ahora el viernes siguiente: un feriado no le hace perder su turno | P1 |
 | B6 | Deshacer feriado | Pulsa «deshacer» en la nota | Vuelve todo atrás: el feriado desaparece del riel y la tarjeta regresa a ese viernes | P1 |

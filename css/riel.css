@@ -45,13 +45,23 @@
   color:var(--azul);
 }
 
-.riel-fila--salto .riel-nombre{
+/* Viernes ya resueltos: siguen visibles pero apagados. */
+.riel-fila--resuelto .riel-nombre{
   color:var(--gris);
-  font-style:italic;
   font-weight:400;
 }
-.riel-fila--salto .riel-fecha{
+.riel-fila--resuelto .riel-fecha{
   text-decoration:line-through;
+}
+.riel-fila--salto .riel-nombre{
+  font-style:italic;
+}
+
+.riel-hecho{
+  font-size:11.5px;
+  color:var(--verde);
+  margin-left:auto;
+  font-weight:600;
 }
 
 .riel-swap{
