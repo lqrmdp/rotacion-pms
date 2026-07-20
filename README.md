@@ -70,11 +70,22 @@ Los datos se guardan en un único documento: colección `rotacion-pms`, document
 | `fechas.js` | Próximo viernes y formateo de fechas/horas en es-MX. |
 | `dom.js` | Referencias a los nodos fijos del documento, en un solo sitio. |
 | `errores.js` | Mostrar y ocultar la caja de error. |
+| `notificaciones.js` | Publica en el espacio de Google Chat cuando alguien propone una cesión o la resuelve. |
 | `render.js` | Deriva los datos de vista desde el estado y reparte el pintado. |
 | `vista-turno.js` | Pinta la tarjeta del viernes en curso y sus botones. |
 | `vista-propuesta.js` | Pinta la propuesta de cesión pendiente. |
 | `vista-riel.js` | Pinta los próximos ocho turnos. |
 | `vista-historial.js` | Pinta el historial de presentaciones, feriados y cesiones. |
+
+## Avisos en Google Chat
+
+Hay dos tipos, y viven en sitios distintos:
+
+**Inmediatos, desde la app.** Al proponer una cesión y al aceptarla o rechazarla, `js/notificaciones.js` publica en el espacio del equipo. El webhook está en `CHAT_WEBHOOK` (`js/config.js`) y los eventos se activan o desactivan en `NOTIFICAR`. Si el aviso falla, la app no se entera: el cambio ya está guardado en Firestore y el error solo va a la consola.
+
+**Semanal, desde Google Apps Script.** `apps-script/aviso-martes.gs` publica cada martes quién presenta el viernes. No puede vivir en la web —una página estática solo se ejecuta cuando alguien la abre—, así que corre en Google con un disparador por tiempo. Las instrucciones de instalación están en la cabecera del propio archivo.
+
+⚠️ El `.gs` se guarda aquí con el marcador `PEGA_AQUI_EL_WEBHOOK_DEL_ESPACIO`: la URL real solo se escribe dentro de Apps Script, para no publicarla en el repositorio. Si cambias de webhook, hay que actualizarlo en los **dos** sitios.
 
 ## Publicar
 

@@ -40,7 +40,8 @@ export async function leerUnaVez(){
   return snap.exists() ? snap.data() : null;
 }
 
-/** Aplica `fn(estado)` dentro de una transacción y guarda el resultado. */
+/** Aplica `fn(estado)` dentro de una transacción y guarda el resultado.
+    Devuelve true solo si el cambio llegó a Firestore. */
 export async function mutar(fn){
   try{
     await runTransaction(db, async (tx) => {
@@ -50,8 +51,10 @@ export async function mutar(fn){
       tx.set(docRef, nuevo);
     });
     ocultarError();
+    return true;
   } catch(e){
     mostrarError("No se pudo guardar el cambio. Intenta de nuevo.");
     console.error(e);
+    return false;
   }
 }
