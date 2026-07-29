@@ -4,7 +4,7 @@
 import { mutar } from "./repo.js";
 import { getYo } from "./store.js";
 import { isoDate } from "./fechas.js";
-import { asignadoIdx } from "./rotacion.js";
+import { asignadoIdx, fechaTurnoActivo } from "./rotacion.js";
 import { avisarPropuesta, avisarResolucion } from "./notificaciones.js";
 
 export function marcarRealizada(viernes){
@@ -40,7 +40,7 @@ export async function proponerCesion(){
     const fromIdx = asignadoIdx(s, s.turn);
     const toIdx = (fromIdx+1) % s.pms.length;
     s.proposals.push({id:Date.now().toString(36), turn:s.turn, fromIdx, toIdx, by:getYo(), at:new Date().toISOString(), status:"pendiente"});
-    aviso = { de: s.pms[fromIdx], para: s.pms[toIdx] };
+    aviso = { de: s.pms[fromIdx], para: s.pms[toIdx], viernes: fechaTurnoActivo(s) };
     return s;
   });
   if (ok && aviso) avisarPropuesta(aviso);
@@ -57,7 +57,7 @@ export async function resolverPropuesta(id, aceptar){
       s.overrides[String(p.turn)] = p.toIdx;
       s.overrides[String(p.turn+1)] = p.fromIdx;
     }
-    aviso = { de: s.pms[p.fromIdx], para: s.pms[p.toIdx], aceptada: aceptar, por: getYo() };
+    aviso = { de: s.pms[p.fromIdx], para: s.pms[p.toIdx], aceptada: aceptar, por: getYo(), viernes: fechaTurnoActivo(s) };
     return s;
   });
   if (ok && aviso) avisarResolucion(aviso);

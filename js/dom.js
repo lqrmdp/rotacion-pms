@@ -15,6 +15,7 @@ export const el = {
   chipEstado:     byId("chipEstado"),
   pmNombre:       byId("pmNombre"),
   acciones:       byId("acciones"),
+  notaVencido:    byId("notaVencido"),
   notaCheck:      byId("notaCheck"),
   riel:           byId("riel"),
   toggleHist:     byId("toggleHist"),

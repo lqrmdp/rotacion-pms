@@ -4,7 +4,7 @@
    se registra en la consola y punto. */
 
 import { CHAT_WEBHOOK, NOTIFICAR, APP_URL } from "./config.js";
-import { proximoViernes, fmtCorta } from "./fechas.js";
+import { fmtCorta } from "./fechas.js";
 
 /** Google Chat acepta *negrita*, _cursiva_ y <url|texto> en el campo text. */
 async function enviar(texto){
@@ -23,20 +23,20 @@ async function enviar(texto){
 
 const enlace = () => `\n\n<${APP_URL}|Abrir la rotación>`;
 
-export function avisarPropuesta({ de, para }){
+export function avisarPropuesta({ de, para, viernes }){
   if (!NOTIFICAR.propuesta) return;
   enviar(
-    `🔁 *${de}* propone ceder su turno del viernes ${fmtCorta(proximoViernes())} a *${para}*.\n` +
+    `🔁 *${de}* propone ceder su turno del viernes ${fmtCorta(viernes)} a *${para}*.\n` +
     `A cambio tomará el turno del siguiente viernes.\n` +
     `_${para} tiene que aceptarlo o rechazarlo._` + enlace()
   );
 }
 
-export function avisarResolucion({ de, para, aceptada, por }){
+export function avisarResolucion({ de, para, aceptada, por, viernes }){
   if (!NOTIFICAR.resolucion) return;
-  const viernes = fmtCorta(proximoViernes());
+  const dia = fmtCorta(viernes);
   enviar(aceptada
-    ? `✅ *${por}* aceptó el cambio: el viernes ${viernes} presenta *${para}* en lugar de *${de}*.` + enlace()
-    : `🚫 *${por}* rechazó el cambio: el viernes ${viernes} sigue presentando *${de}*.` + enlace()
+    ? `✅ *${por}* aceptó el cambio: el viernes ${dia} presenta *${para}* en lugar de *${de}*.` + enlace()
+    : `🚫 *${por}* rechazó el cambio: el viernes ${dia} sigue presentando *${de}*.` + enlace()
   );
 }

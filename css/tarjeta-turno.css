@@ -40,6 +40,7 @@
 }
 .chip-verde{background:var(--verde-suave); color:var(--verde);}
 .chip-ambar{background:var(--ambar-suave); color:var(--ambar);}
+.chip-rojo{background:var(--error-fondo); color:var(--error-texto);}
 
 .pm-nombre{
   font-family:var(--font-titulo);
@@ -61,6 +62,16 @@
   display:flex;
   flex-direction:column;
   gap:var(--espacio-sm);
+}
+
+.nota-vencido{
+  background:var(--error-fondo);
+  border:1px solid var(--error-borde);
+  color:var(--error-texto);
+  border-radius:var(--radio-sm);
+  padding:10px 12px;
+  font-size:13px;
+  margin-top:14px;
 }
 
 .nota-check{

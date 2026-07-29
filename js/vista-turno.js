@@ -1,8 +1,10 @@
 /* vista-turno.js — tarjeta del próximo turno pendiente: fecha, PM,
    botones de acción y nota del último viernes resuelto.
 
-   La tarjeta siempre muestra un viernes sin resolver, así que el chip
-   siempre está pendiente: lo ya hecho se ve en el riel y en la nota. */
+   La tarjeta siempre muestra el próximo viernes sin resolver, así que
+   puede estar en el pasado si nadie la marcó a tiempo: por eso existe
+   el chip «vencido» y el aviso aparte, para que ese hueco se note en
+   vez de perderse en silencio. */
 
 import { el } from "./dom.js";
 import { fmtLarga, fmtCorta, fmtHora } from "./fechas.js";
@@ -21,18 +23,18 @@ function enlaceDeshacer(){
 /** Las fechas se guardan como AAAA-MM-DD; al mediodía para esquivar husos. */
 const aFecha = (iso) => new Date(iso + "T12:00:00");
 
-export function pintarTurno({ state, yo, viernes, pmActual, pmSiguiente, propuestaActiva, ultimoResuelto, ultimaEntrada }){
+export function pintarTurno({ state, yo, viernes, vencido, pmActual, pmSiguiente, propuestaActiva, ultimoResuelto }){
   el.fechaGrande.textContent = fmtLarga(viernes);
   el.pmNombre.textContent = pmActual;
 
   const chip = el.chipEstado;
-  chip.textContent = "⏳ Pendiente";
-  chip.className = "chip chip-ambar";
+  chip.textContent = vencido ? "⚠️ Vencido" : "⏳ Pendiente";
+  chip.className = "chip " + (vencido ? "chip-rojo" : "chip-ambar");
 
   const acciones = el.acciones;
   acciones.innerHTML = "";
   const notaCheck = el.notaCheck;
-  notaCheck.textContent = "";
+  notaCheck.innerHTML = "";
 
   // Sin nombre seleccionado no se registra nada: quedaría sin autor.
   const identificado = !!yo;
@@ -59,6 +61,11 @@ export function pintarTurno({ state, yo, viernes, pmActual, pmSiguiente, propues
   bSkip.onclick = () => registrarSinSesion(viernes);
   acciones.appendChild(bSkip);
 
+  el.notaVencido.classList.toggle("oculto", !vencido);
+  if (vencido){
+    el.notaVencido.textContent = "⚠️ Este viernes ya pasó y sigue sin registrar. Márcalo para que la rotación no se atrase.";
+  }
+
   if (!identificado){
     notaCheck.textContent = "Selecciona tu nombre arriba para poder registrar.";
     return;
@@ -68,7 +75,7 @@ export function pintarTurno({ state, yo, viernes, pmActual, pmSiguiente, propues
     const dia = fmtCorta(aFecha(ultimoResuelto.date));
     notaCheck.innerHTML = ultimoResuelto.type === "check"
       ? `✅ El ${dia} presentó ${state.pms[ultimoResuelto.pmIndex]} · marcado por ${ultimoResuelto.by||"—"}, ${fmtHora(ultimoResuelto.at)}`
-      : `✖️ El ${dia} se registró sin sesión por ${ultimoResuelto.by||"—"}. El turno se corrió a este viernes.`;
-    if (ultimaEntrada === ultimoResuelto) notaCheck.appendChild(enlaceDeshacer());
+      : `✖️ El ${dia} se registró sin sesión por ${ultimoResuelto.by||"—"}. El turno se corrió al siguiente viernes.`;
+    notaCheck.appendChild(enlaceDeshacer());
   }
 }

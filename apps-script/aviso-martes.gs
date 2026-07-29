@@ -2,7 +2,9 @@
  * aviso-martes.gs — recordatorio semanal en Google Chat.
  *
  * Lee el estado de la rotación desde Firestore, calcula a quién le toca
- * el viernes que viene y lo publica en el espacio del equipo.
+ * y lo publica en el espacio del equipo. Si ese turno ya venció (nadie
+ * lo marcó a tiempo), lo avisa igual pero con otro texto, en vez de
+ * quedarse callado — eso fue justo lo que falló la primera vez.
  *
  * NO se ejecuta desde la web: vive en Google Apps Script, con un
  * disparador por tiempo. Por eso funciona aunque nadie abra la app.
@@ -34,22 +36,24 @@ const MESES = ['enero','febrero','marzo','abril','mayo','junio',
 
 // ─── Punto de entrada (el que dispara el temporizador) ──────────────
 function avisoSemanal() {
-  const estado  = leerEstado();
-  const viernes = proximoViernes();
+  const estado = leerEstado();
+  const activo = fechaTurnoActivo(estado);
+  const pm     = estado.pms[asignadoIdx(estado, estado.turn)];
+  const fecha  = activo.getDate() + ' de ' + MESES[activo.getMonth()];
 
-  if (yaResuelto(estado, viernes)) {
-    console.log('El viernes ' + iso(viernes) + ' ya está resuelto (presentado o feriado). No se avisa.');
-    return;
-  }
+  const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+  const vencido = activo < hoy;
 
-  const pm = estado.pms[asignadoIdx(estado, estado.turn)];
-  const fecha = viernes.getDate() + ' de ' + MESES[viernes.getMonth()];
+  const texto = vencido
+    ? '⚠️ *Pendiente de una semana anterior:* ' + pm + '\n' +
+      'Viernes ' + fecha + ' · nadie lo registró todavía. Si ya se presentó, ' +
+      'márquenlo en la app para que la rotación se ponga al día.\n' +
+      '<' + APP_URL + '|Abrir la rotación>'
+    : '📅 *Próximo PM a presentar:* ' + pm + '\n' +
+      'Viernes ' + fecha + ' · estatus de proyectos ante dirección.\n' +
+      '<' + APP_URL + '|Abrir la rotación>';
 
-  enviar(
-    '📅 *Próximo PM a presentar:* ' + pm + '\n' +
-    'Viernes ' + fecha + ' · estatus de proyectos ante dirección.\n' +
-    '<' + APP_URL + '|Abrir la rotación>'
-  );
+  enviar(texto);
 }
 
 // ─── Firestore (lectura vía API REST) ───────────────────────────────
@@ -65,6 +69,7 @@ function leerEstado() {
 
   const f = JSON.parse(resp.getContentText()).fields;
   return {
+    anchor:    f.anchor.stringValue,
     pms:       (f.pms.arrayValue.values || []).map(function (v) { return v.stringValue; }),
     turn:      Number(f.turn.integerValue || 0),
     overrides: (f.overrides.mapValue && f.overrides.mapValue.fields) || {},
@@ -78,26 +83,13 @@ function asignadoIdx(s, turn) {
   return ov !== undefined ? Number(ov.integerValue) : turn % s.pms.length;
 }
 
-/** Sin recordatorio si ese viernes ya está presentado o es feriado. */
-function yaResuelto(s, viernes) {
-  const dia = iso(viernes);
-  return s.history.some(function (h) {
-    return h.mapValue.fields.date.stringValue === dia;
-  });
-}
-
-// ─── Fechas ─────────────────────────────────────────────────────────
-function proximoViernes() {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  d.setDate(d.getDate() + ((5 - d.getDay() + 7) % 7));
+/** Mismo criterio que rotacion.js en la web: ancla + una semana por
+    cada viernes ya resuelto. No depende de la fecha de hoy: por eso
+    un viernes sin marcar no se pierde ni hace que el aviso se calle. */
+function fechaTurnoActivo(s) {
+  var d = new Date(s.anchor + 'T12:00:00');
+  d.setDate(d.getDate() + 7 * s.history.length);
   return d;
-}
-
-function iso(d) {
-  const mes = ('0' + (d.getMonth() + 1)).slice(-2);
-  const dia = ('0' + d.getDate()).slice(-2);
-  return d.getFullYear() + '-' + mes + '-' + dia;
 }
 
 // ─── Google Chat ────────────────────────────────────────────────────

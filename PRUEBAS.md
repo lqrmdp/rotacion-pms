@@ -50,6 +50,14 @@ Prioridades: **P1** = si falla, no se libera · **P2** = deseable, no bloqueante
 | C4 | Aceptar | Pulsa «Aceptar el cambio» | Riel: 24-jul → Facundo y 31-jul → Jorge, ambos con «↔ cambio» | P1 |
 | C5 | Rechazar | Repite C2 y pulsa «Rechazar» | La caja desaparece, el riel NO cambia, queda registrado en el historial | P2 |
 
+## G · Nadie marca a tiempo
+
+| # | Qué valida | Cómo | Resultado esperado | Pri |
+|---|---|---|---|---|
+| G1 | Viernes vencido | Deja pasar un viernes sin marcar nada, o simula un `anchor` antiguo | El chip cambia a «⚠️ Vencido» (rojo) y aparece el aviso bajo los botones. La fecha mostrada es la del viernes que se saltó, no la de hoy | P1 |
+| G2 | No se pierde el turno | Marca ese viernes vencido como realizada o feriado | Se registra con su fecha real, no con la de hoy. La tarjeta avanza al siguiente viernes con normalidad | P1 |
+| G3 | El aviso semanal también lo nota | Con un turno vencido, ejecuta `avisoSemanal` a mano | Llega el mensaje ⚠️ de «pendiente de una semana anterior», no silencio | P1 |
+
 ## D · Varias personas a la vez
 
 | # | Qué valida | Cómo | Resultado esperado | Pri |
@@ -83,8 +91,10 @@ Prioridades: **P1** = si falla, no se libera · **P2** = deseable, no bloqueante
 - **Cualquiera puede marcar cualquier cosa.** No hay autenticación: el desplegable
   es una declaración de intenciones, no una identidad. Cualquiera puede decir que es
   otra persona. Fue una decisión consciente, no un fallo.
-- **El cambio de año y los cambios de horario** no están probados. La rotación se
-  apoya en `proximoViernes()`, que usa la fecha del navegador de cada persona.
+- **El cambio de año** no está probado explícitamente (sí se probó cruzar meses).
+  La fecha de hoy solo se usa para decidir si el turno activo está «vencido»; el
+  calendario de la rotación en sí depende únicamente del ancla y de cuántos
+  viernes se han resuelto, no de la fecha del navegador de cada persona.
 - **Qué pasa si se editan los datos a mano** en la consola de Firestore. Si alguien
   toca `turn` u `overrides` sin cuidado, la rotación puede descuadrarse.
 - **Volumen**: con un año de uso el historial tendrá unas 50 entradas y se pinta

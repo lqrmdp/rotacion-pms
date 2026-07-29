@@ -2,8 +2,7 @@
    el pintado entre las cuatro vistas. */
 
 import { getState, getYo } from "./store.js";
-import { proximoViernes, isoDate } from "./fechas.js";
-import { asignadoIdx, viernesEfectivo } from "./rotacion.js";
+import { asignadoIdx, fechaTurnoActivo, turnoVencido } from "./rotacion.js";
 import { pintarPropuesta } from "./vista-propuesta.js";
 import { pintarTurno } from "./vista-turno.js";
 import { pintarRiel } from "./vista-riel.js";
@@ -14,22 +13,23 @@ export function render(){
   if (!state) return;
   const yo = getYo();
 
-  // El próximo viernes sin resolver: ni presentado ni marcado como feriado.
-  const viernes = viernesEfectivo(state);
+  // El viernes del turno activo: ancla + una semana por cada viernes ya
+  // resuelto. No depende de la fecha de hoy, así que nunca se pierde
+  // uno por no haberlo marcado a tiempo.
+  const viernes = fechaTurnoActivo(state);
+  const vencido = turnoVencido(state);
   const idxActual = asignadoIdx(state, state.turn);
   const pmActual = state.pms[idxActual];
   const idxSiguiente = (idxActual+1) % state.pms.length;
   const pmSiguiente = state.pms[idxSiguiente];
   const propuestaActiva = state.proposals.find(p => p.turn===state.turn && p.status==="pendiente");
 
-  // Último viernes resuelto que todavía se ve en el riel: es el que se
-  // puede deshacer, y el que explica por qué la fecha se ha corrido.
-  const desde = isoDate(proximoViernes());
-  const vigentes = state.history.filter(h => h.date >= desde);
-  const ultimoResuelto = vigentes[vigentes.length-1];
-  const ultimaEntrada = state.history[state.history.length-1];
+  // El historial es siempre secuencial: el último elemento es, por
+  // definición, el viernes resuelto más reciente y el único que se
+  // puede deshacer.
+  const ultimoResuelto = state.history[state.history.length-1];
 
-  pintarTurno({ state, yo, viernes, pmActual, pmSiguiente, propuestaActiva, ultimoResuelto, ultimaEntrada });
+  pintarTurno({ state, yo, viernes, vencido, pmActual, pmSiguiente, propuestaActiva, ultimoResuelto });
   pintarPropuesta({ state, yo, propuestaActiva, viernes });
   pintarRiel(state);
   pintarHistorial(state);
