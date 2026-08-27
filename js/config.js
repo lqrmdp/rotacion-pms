@@ -41,7 +41,7 @@ export const NOTIFICAR = {
 export const APP_URL = "https://lqrmdp.github.io/rotacion-pms/";
 
 // ─── Configuración de la rotación ───────────────────────────────────
-export const PMS = ["Jorge García","Facundo Stiefkens","Maricielo Pereyra","Alejandro Gutiérrez","Cristian Medina","Soporte"];
+export const PMS = ["Jorge García","Facundo Stiefkens","Maricielo Pereyra","Alejandro Gutiérrez","Cristian Medina","Paola Bello"];
 export const ANCHOR = "2026-07-24"; // viernes en que inicia Jorge García
 
 export const ESTADO_INICIAL = {
