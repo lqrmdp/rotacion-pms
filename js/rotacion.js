@@ -26,15 +26,27 @@ export function turnoVencido(s){
   return fechaTurnoActivo(s) < hoy;
 }
 
-/** Los próximos `n` viernes: primero se recorre el historial en orden
-    (ya resueltos), y al agotarse se generan turnos futuros. */
-export function proximosTurnos(s, n = 8){
+/** Los próximos `n` viernes: unos pocos ya resueltos (de contexto,
+    tachados) y el resto siempre hacia adelante. Sin este límite, en
+    cuanto el historial supera `n` registros la ventana se llena entera
+    de turnos pasados y los pendientes dejan de verse — el riel se
+    queda "congelado" aunque el estado real siga avanzando. */
+export function proximosTurnos(s, n = 8, contexto = 2){
   const hist = s.history || [];
+  const inicio = Math.max(0, hist.length - contexto);
+
+  // Cuántos "check" hubo antes de `inicio`, para que el número de turno
+  // de los pendientes coincida con el real (los feriados no cuentan).
+  let turno = 0;
+  for (let j = 0; j < inicio; j++){
+    if (hist[j].type === "check") turno++;
+  }
+
   const out = [];
   let fecha = new Date(s.anchor + "T12:00:00");
-  let turno = 0;
+  fecha.setDate(fecha.getDate() + 7 * inicio);
 
-  for (let i = 0; out.length < n; i++){
+  for (let i = inicio; out.length < n; i++){
     const h = hist[i];
 
     if (h){
